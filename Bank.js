@@ -6,8 +6,12 @@ class Bank {
     }
 
     // Add methods here:
-    // Example: createAccount(name, initialDeposit)
-
+    // Example: createAccount(name, initialDeposit)   
+    createAccount(name, initialDeposit) {
+        const newAccount = new Account (name, initialDeposit);
+        this.accounts.push(newAccount);
+        return newAccount
+    }
 }
 
 // Account Class: Represents a single user's account
@@ -17,20 +21,49 @@ class Account {
         this.balance = balance; // Initial balance (default is 0)
         this.transactionHistory = []; // Keeps a record of all transactions
     }
-
+   
     // Add methods here:
     // Example: deposit(amount) 
     // example data to be stored in transactionHistory { transactionType: 'Deposit', amount: 500 }
-
+    deposit(amount){
+        this.balance += amount
+        console.log(`Deposited $${amount}. New Balance: $${this.balance}`);
+        this.transactionHistory.push({transactionType:'Deposit', amount});
+    }
     // Example: withdraw(amount)
     // example data to be stored in transactionHistory { transactionType: 'Withdrawal', amount: 200 }
-
+    withdraw(amount){
+        if (amount > this.balance) {
+            console.log("Insufficient funds.");
+        } 
+        else {
+            this.balance -= amount
+            console.log(`Witdrawal $${amount}. New Balance: $${this.balance}`);
+            this.transactionHistory.push({transactionType:'Withdrawal', amount});
+        }
+    }
     // Example: transfer(amount, recipientAccount)
     // example data to be stored in transactionHistory:
     // for account sending { transactionType: 'Transfer', amount: 300, to: recipientName }
     // for account recieving { transactionType: 'Received', amount: 300, from: senderName }
+    transfer(amount, recipientAccount){
+        if (amount > this.balance){
+            console.log("Insufficient funds for tranfer");
+        }
+        else {
+            this.balance -= amount
+            console.log(`Transfer $${amount} to ${recipientAccount.name}. New Balance: $${this.balance}`);
+            this.transactionHistory.push ({transactionType: 'Transfer', amount, to: recipientAccount.name});
+            recipientAccount.balance += amount;
+            recipientAccount.transactionHistory.push ({transactionType: 'Received', amount, from: this.name});
+        }
+    }
     
     // Example: checkBalance()
+    checkBalance() {
+        console.log(`Current balance = $${this.balance}`);
+        return this.balance;
+    }
 }
 
 //<-------------------------------DO NOT WRITE BELOW THIS LINE------------------------------>
